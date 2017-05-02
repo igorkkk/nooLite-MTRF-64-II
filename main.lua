@@ -8,6 +8,7 @@ mod.publish = false
 -- UART
 crcR = 0
 gotRAW = {}
+itmState = {}
 counter = 1
 startUART = false
 --------
@@ -52,10 +53,14 @@ uart.on("data",1,
             tmr.stop(stUART)
             tmr.unregister(stUART)
             local s = ""
-            for _, v in pairs(gotRAW) do
-                s = s.."$"..string.format("%02X", v)
+            -- for _, v in pairs(gotRAW) do
+            --    s = s.."$"..string.format("%02X", v)
+            --end
+            
+			for n, v in pairs(gotRAW) do
+                s = s..(n-1)..":"..string.format("%d", v).." "
             end
-            -- 29.04.2017
+			s = string.sub(s, 1, #s - 2)
             answer = {}
             answer.raw = s
             dofile('analize.lua')
