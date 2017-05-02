@@ -1,28 +1,21 @@
 do
 local analize = function()
-    local item = string.format("%02d", gotRAW[5])
-	
+ 	itm = string.format("%02d", gotRAW[5])
+	if itmState.gotRAW[5][1] == 0 or itmState.gotRAW[5][1] == 2 then
+		dofile('analizeold.lua')
+		return
+	end
 	if itmState.gotRAW[5][1] == 1 then
 		dofile('analizebrgt.lua')
 		return
 	end
-	if itmState.gotRAW[5][4] == 1 then
-		dofile('analizenew.lua')
-		return
-	end
-	if itmState.gotRAW[5][1] == 0 then
-		dofile('analizebrgt.lua')
-		return
-	end
-	
-	
+
 	if gotRAW[6] == 0x82 or gotRAW[6] == 25  then
         if gotRAW[11] == 255 then
-            answer[item] = "ON"
+            answer[itm] = "ON"
         else
-            answer[item] = "OFF"
+            answer[itm] = "OFF"
         end
-    
 	
 	elseif gotRAW[6] == 0x15 then
         local temp = 0
@@ -33,14 +26,14 @@ local analize = function()
             temp = temp - 0x1000
         end
         temp = temp * 0.1
-        local newitm = item.."/temp"
+        local newitm = itm.."/temp"
         answer[newitm] = temp
         if gotRAW[10] ~= 0 then
-            newitm = item.."/humi"
+            newitm = itm.."/humi"
             answer[newitm] = gotRAW[10]
         end
     elseif gotRAW[6] == 20 then
-        answer.lowbat = item
+        answer.lowbat = itm
     end
     gotRAW = {}
     publ()
