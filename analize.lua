@@ -16,7 +16,6 @@ local analize = function()
         else
             answer[itm] = "OFF"
         end
-	
 	elseif gotRAW[6] == 0x15 then
         local temp = 0
         local hempH = gotRAW[9]
