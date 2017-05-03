@@ -1,18 +1,16 @@
 do
-local cell = "11"
-local modcell = "0"
-local remove = "88"
+local cell = cell or ""
+local modcell = modcell or "0"
+local remove = remove or "88"
 local ds = {}
-
-ds[cell] = modcell
-ds["3"] = "2"
-
-local ex = "65"
+if cell ~= ""  then
+    ds[cell] = modcell
+end
 if file.open("powerlist.lua", "r") then
     local s = file.read('\n')
     while s do
         a, b = string.match(s, "(%d+),(%d+)")
-        if a ~= ex then ds[a] = b end
+        ds[a] = b
         s = file.read('\n')
     end
     file.close()
