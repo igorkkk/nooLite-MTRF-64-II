@@ -1,3 +1,4 @@
+<<<<<<< Temporary merge branch 1
 do
 local cell = cell or ""
 local modcell = modcell or "0"
@@ -74,5 +75,7 @@ end
 file.close()
 file.remove("powerlist.lua")
 file.rename("powers.lua","powerlist.lua")
+end
+>>>>>>> Temporary merge branch 2
 end
 end
