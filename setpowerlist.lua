@@ -7,7 +7,9 @@ local ds = {}
 if cell ~= ""  then
     ds[cell] = modcell
 end
-
+    
+_G.sell = ""
+    
 if file.open("powerlist.lua", "r") then
     local s = file.read('\n')
     while s do
