@@ -1,16 +1,16 @@
 do
 local analize = function()
  	itm = string.format("%02d", gotRAW[5])
-	if itmState.gotRAW[5][1] == 0 or itmState.gotRAW[5][1] == 2 then
-		dofile('analizeold.lua')
+	if  (gotRAW[2] == 1 or gotRAW[2] == 3) and gotRAW[6] == 4 then
+		dofile('analizedesk.lua')
 		return
 	end
-	if itmState.gotRAW[5][1] == 1 then
-		dofile('analizebrgt.lua')
-		return
-	end
-
-	if gotRAW[6] == 0x82 or gotRAW[6] == 25  then
+	
+	if gotRAW[6] == 0 then
+        answer[itm] = "ON"
+    elseif gotRAW[6] == 2 then
+        answer[itm] = "OFF"
+	elseif gotRAW[6] == 0x82 or gotRAW[6] == 25  then
         if gotRAW[11] == 255 then
             answer[itm] = "ON"
         else
