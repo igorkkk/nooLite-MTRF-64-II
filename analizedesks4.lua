@@ -12,10 +12,10 @@
 -- func = ""
 
 do
-local gotRAW = {1,2,3,4,8,4,7,8,9,}
+local gotRAW = {1,2,3,4,7,4,7,8,9,}
 local itmState = {
-    {11},
-    {9,15,15}
+   -- {11},
+   -- {9,15,15,0}
 } 
 
 itmn = gotRAW[5]
@@ -65,13 +65,13 @@ local z = function()
             end
         end
         if not state then
-            table.insert(itmState,{itmn,100,100})
+            table.insert(itmState,{itmn,100,100,0})
             print("Cell "..itmn.." is new and Switched ON")
             comm = "ON"
         end 
    --]]
     end
-print(itm, func, comm)
+print(itmn, func, comm)
  -- newdeal()
 end
 
