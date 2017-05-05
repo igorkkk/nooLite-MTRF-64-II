@@ -6,7 +6,7 @@
 --]]
 
 do
-local gotRAW = {1,2,3,4,29,0,7,8,9,}
+local gotRAW = {1,2,3,4,29,5,7,8,9,}
 local itmState = {
     {11},
     {9,0,15,0}
@@ -35,20 +35,39 @@ local z = function()
     local state
     if itmn > 10 then
         flaggg  = true
-        itmState[itmn] = nil
-        
+
         func = itmn > 20 and "comf" or "comm"
         print("func = "..func)
-        
-        if gotRAW[6] == 0 then
+
+        if gotRAW[6] == 1 then
             comm = "OFF" 
             print("Switch OFF NOW!")
-        else
-            table.insert(itmState,{itmn})
+            if cellNo then
+                itmState[cellNo] = nil
+            end
+            
+        elseif gotRAW[6] == 1
+            if not cellNo then
+                table.insert(itmState,{itmn})
+            end
             print("Switch ON, just NOW!")
             comm = "ON"
-         end
+        end
+
+        elseif gotRAW[6] == 5
+            if not cellNo then
+                table.insert(itmState,{itmn})
+                print("Switch ON, just NOW!")
+                comm = "ON"
+            else
+                itmState[cellNo] = nil
+                comm = "OFF" 
+                print("Switch OFF NOW!")
+            end
+        end
+    
     -- for blocks that run brightness
+    
     else
         func = "comm"
         print("func = "..func)
