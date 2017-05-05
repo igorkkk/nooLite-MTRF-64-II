@@ -1,7 +1,7 @@
 -- itmState = {} - table contains power blocks state
 -- no record - power block is switched OFF
 -- {%d} - d - cell number, switched ON
--- {%d,%d,%d} - cell number, brghtness now, brightness at block memory
+-- {%d,%d,%d,%d} - cell number, brghtness now, brightness at block memory, 0 or 1 - direction
 
 -- blocks No<10 run brightness
 -- blocks No>20 are new F type
@@ -12,10 +12,10 @@
 -- func = ""
 
 do
-local gotRAW = {1,2,3,4,7,2,7,8,9,}
+local gotRAW = {1,2,3,4,29,0,7,8,9,}
 local itmState = {
     {11},
-    {9,0,15}
+    {9,0,15,0}
 } 
 
 local flaggg = false
@@ -71,7 +71,7 @@ local z = function()
         if not state then
             print("Cell "..itmn.." is new, made record")
             if gotRAW[6] == 2 then 
-                table.insert(itmState,{itmn,100,100})
+                table.insert(itmState,{itmn,100,100,0})
                 comm = "ON"
             else
                 table.insert(itmState,{itmn,0,100})
