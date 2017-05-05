@@ -1,15 +1,15 @@
-
+--[[
 1 - понижать яркость
 3 - повышать яркость
 5 - изменять яркость
 10- стоп изменениям яркости 
-
+--]]
 
 do
 local gotRAW = {1,2,3,4,29,0,7,8,9,}
 local itmState = {
     {11},
-    {9,0,15}
+    {9,0,15,0}
 } 
 
 itmn = gotRAW[5]
@@ -18,14 +18,15 @@ func = ""
 local flaggg = false
 local cellNo
 
-for k, v in pairs(gotRAW) do
+for k, v in pairs(itmState) do
     if v[1] == itmn then
         cellNo = k
     end
 end
+
 if not cellNo and itmn <11 then
     cellNo = #gotRAW+1
-    gotRAW[cellNo] = {itmn, 0, 100, 0}
+    itmState[cellNo] = {itmn, 0, 100, 0}
 end
 
 
