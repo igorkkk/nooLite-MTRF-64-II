@@ -3,13 +3,13 @@ local analize = function()
  	itm = string.format("%02d", gotRAW[5])
 	
 	if  (gotRAW[2] == 1 or gotRAW[2] == 3) then
-		if gotRAW[6] == 4 then
-		    dofile('analizedesk4.lua')
-		    return
-        end
-        if gotRAW[6] == 2 or gotRAW[6] == 0 then
-            dofile('analizedesk02.lua')
+        if gotRAW[6] == 4 then
+            dofile('analizedesk4.lua')
             return
+        end
+            if gotRAW[6] == 2 or gotRAW[6] == 0 then
+            dofile('analizedesk02.lua')
+        return
         end
 	end
     
