@@ -46,7 +46,7 @@ local z = function()
                 itmState[cellNo] = nil
             end
             
-        elseif gotRAW[6] == 1
+        elseif gotRAW[6] == 1 then
             if not cellNo then
                 table.insert(itmState,{itmn})
             end
@@ -54,7 +54,7 @@ local z = function()
             comm = "ON"
         end
 
-        elseif gotRAW[6] == 5
+        elseif gotRAW[6] == 5 then
             if not cellNo then
                 table.insert(itmState,{itmn})
                 print("Switch ON, just NOW!")
