@@ -1,7 +1,7 @@
 -- itmState = {} - table contains power blocks state
 -- no record - power block is switched OFF
 -- {%d} - d - cell number, switched ON
--- {%d,%d,%d} - cell number, brghtness now, brightness at block memory
+-- {%d,%d,%d, true/false} - cell number, brghtness now, brightness at block memory
 
 -- blocks No<10 run brightness
 -- blocks No>20 are new F type
@@ -65,7 +65,7 @@ local z = function()
             end
         end
         if not state then
-            table.insert(itmState,{itmn,100,100,0})
+            table.insert(itmState,{itmn,100,100,true})
             print("Cell "..itmn.." is new and Switched ON")
             comm = "ON"
         end 
