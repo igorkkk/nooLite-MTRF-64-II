@@ -12,7 +12,7 @@ local itmState = {
 	{8,50,50,true}
 } 
 
-itmn = gotRAW[5]
+local itmn = gotRAW[5]
 print("get cell "..itmn)
 func = ""
 local cellNo
