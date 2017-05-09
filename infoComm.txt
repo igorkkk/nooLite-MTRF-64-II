@@ -1,4 +1,3 @@
-
 	buf[2]
     	 0 – режим nooLite TX
     	 1 – режим nooLite RX
@@ -41,6 +40,5 @@
 	buf[12-15] - адрес устройства F
 	buf[16] - crc
 	buf[17] - 174
-	
 	
 command = {171, 1, 0,  
