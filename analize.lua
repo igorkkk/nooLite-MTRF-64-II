@@ -24,16 +24,18 @@ local analize = function()
 	end
 
 	if gotRAW[6] == 0 then
-		answer[itm] = "ON"
-	
+		--answer[itm] = "OFF"
+		answer[itm] = 0
 	elseif gotRAW[6] == 2 then
-		answer[itm] = "OFF"
-	
+		--answer[itm] = "ON"
+		answer[itm] = 100
 	elseif gotRAW[6] == 0x82 or gotRAW[6] == 25  then
 		if gotRAW[11] == 255 then
-		answer[itm] = "ON"
+		--answer[itm] = "ON"
+		answer[itm] = 100
 		else
-		answer[itm] = "OFF"
+		--answer[itm] = "OFF"
+		answer[itm] = 0
 		end
 
 	elseif gotRAW[6] == 6 then
