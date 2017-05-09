@@ -1,15 +1,25 @@
 do
 local analize = function()
  	itm = string.format("%02d", gotRAW[5])
-	
+
+    local map = function(s)
+        if s < 35 then return 0 end
+        if s > 155 then return 100 end
+        return (s-35)*(100)/(120)
+    end
+    
 	if  (gotRAW[2] == 1 or gotRAW[2] == 3) then
         if gotRAW[6] == 4 then
             dofile('analizedesk4.lua')
             return
         end
-            if gotRAW[6] == 2 or gotRAW[6] == 0 then
+        if gotRAW[6] == 2 or gotRAW[6] == 0 then
             dofile('analizedesk02.lua')
-        return
+            return
+        end
+        if gotRAW[6] == 1 or gotRAW[6] == 3 or gotRAW[6] == 3 or gotRAW[6] == 10  then
+            dofile('analizebrgtt.lua')
+            return
         end
 	end
     
@@ -23,7 +33,9 @@ local analize = function()
         else
             answer[itm] = "OFF"
         end
-	elseif gotRAW[6] == 0x15 then
+	elseif gotRAW[6] == 6 then
+        answer[itm] = map(gotRAW[8])
+	elseif gotRAW[6] == 21 then
         local temp = 0
         local hempH = gotRAW[9]
         local hempL = gotRAW[8]
