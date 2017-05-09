@@ -1,7 +1,7 @@
 do
 local dealnow
 dealnow = function()
-    function map(s)
+    local map = function(s)
         if  s == 0 then return s end
         local d = 34 + s*(157-34)/100
         return tonumber(string.format("%d", d))
