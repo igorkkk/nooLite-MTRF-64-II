@@ -1,16 +1,25 @@
 M={}
 M.publ = function(answer, call)
-    answer.heap = ""..node.heap()
+    answerFlag = false
+    -- answer.heap = ""..node.heap()
+    local answ = {}
+    for k, v in pairs(_G.answer) do
+            answ[k] = v
+    end
+    _G.answer = {}
+    
     local sendMQ
     local getd = coroutine.create(function()
-        for k, v in pairs(answer) do
+        for k, v in pairs(answ) do
             sendMQ(k, v)
+            -- answ[k] = nil
             coroutine.yield()
         end
-            collectgarbage()
-			-- 29.04.2017 clear table to send fot MQTT broker
-			_G.answer = {}
-            if call then
+            answerFlag = true
+            if #_G.answer ~= 0 then 
+                publ() 
+            end
+            if call and #_G.answer == 0 then
                 M.publ,sendMQ, getd, M  = nil, nil, nil, nil
                 package.loaded["pubmqtt"]=nil
                 call()                      
@@ -19,7 +28,6 @@ M.publ = function(answer, call)
     sendMQ = function(k, v)
         m:publish("from"..myClient.."/"..k,v,0,0, 
             function(con) 
-                -- print("Send "..k.." = "..v)
                 coroutine.resume(getd)
         end)
     end

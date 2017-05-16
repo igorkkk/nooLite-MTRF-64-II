@@ -2,16 +2,31 @@ do
 local dealnow
 dealnow = function()
     pat[5] = itm
-
-    if func == "comm" then pat[2] = 0
-        if comm == "ON" then pat[6] = 2
-        else pat[6] = 0
+    for ks, vs in pairs(itmState) do
+        if vs[1] == itm then
+            stateNo = ks
         end
     end
-
-    if func == "comf" then pat[2] = 2
-        if comm == "ON" then pat[6] = 2
-        else pat[6] = 0
+    if stateNo == 0 and itm <11 then
+        stateNo = #itmState+1
+        itmState[stateNo] = {itm, 50, 100, true}
+    end
+    if func == "comm" or func == "comf" then
+        pat[2] = (func == "comm") and 0 or 2
+		if comm == "ON" then 
+            pat[6] = 2
+            if stateNo == 0 then
+                table.insert(itmState,{itm})
+            elseif stateNo ~= 0 and itm < 11 then
+                itmState[stateNo][2] = itmState[stateNo][3]
+            end    
+        elseif comm == "OFF" then
+            pat[6] = 0
+            if stateNo > 0 and itm > 10 then
+                itmState[stateNo] = nil
+            elseif stateNo > 0 and itm <11  then
+				itmState[stateNo][2] = 0
+			end
         end
     end
 

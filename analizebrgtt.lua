@@ -1,117 +1,100 @@
---[[
-1 - понижать яркость
-3 - повышать яркость
-5 - изменять яркость
-10- стоп изменениям яркости 
---]]
 do
-local gotRAW = {1,2,3,4,9,3,7,8,9,}
-local itmState = {
-    {11},
-    {9,0,15,true},
-	{8,50,50,true}
-} 
-local itmn = gotRAW[5]
-runbrt = {} -- for run bright
+local setbrgt = function(startbrgt, direction)
+    local stateNo = stateNo
+    local brgtnow = startbrgt or 50
+    local incr = (direction == 1) and 5 or -5
+    local iitm = _G.itmState[stateNo][1] 
+    local sendcom = function(br)
+        _G.itmState[stateNo][2] = br
+        if br >=5 then
+            _G.itmState[stateNo][3] = br
+        end
+        comm = br
+        func = "brgt"
+        _G.gotRAW = {}
+        newdeal()
+    end
 
-print("get cell "..itmn)
-func = ""
-
-local cellNo
-for k, v in pairs(itmState) do
-    if v[1] == itmn then
-        cellNo = k
+    return function(call)
+        tmr.create():alarm(1000, 1, function(t)
+            brgtnow = brgtnow + incr
+            if brgtnow > 100 or brgtnow < 0 or runbrt[iitm].stopbr == 1 then
+                tmr.stop(t)
+                tmr.unregister(t)
+				_G.itmState[stateNo][2] = brgtnow
+			if brgtnow >=5 then
+				brgtnow = (brgtnow < 100) and brgtnow or 100
+				_G.itmState[stateNo][3] = brgtnow
+			end
+                brgtnow, incr, sendcom, iitm = nil, nil, nil, nil
+				if call then call() end
+            else
+                sendcom(brgtnow)
+            end
+        end)
     end
 end
 
-if not cellNo and itmn <11 then
-    cellNo = #gotRAW+1
-    itmState[cellNo] = {itmn, 0, 50, true}
-end
---
-local setbrgt = function(ceNo, cell, startbrgt, direction)
-	local brgtnow = startbrgt or 50
-	local incr = direction and 5 or -5
-	itmState[ceNo][4] = direction
-	local sendcom = function(br)
-		print( "cell: "..cell.." set at "..br)
-		itmState[ceNo][2] = br
-		itmState[ceNo][3] = br
-		comm = br
-		func = "brgt"
-		item = ""..cell
-		-- newdeal()
-	end
-	return function(call)
-		tmr.create():alarm(1000, 1, function(t) 
-			brgtnow = brgtnow + incr
-			if brgtnow > 100 or brgtnow < 0 or runbrt[cell].stopbr then 
-				tmr.stop(t)
-				tmr.unregister(t) 
-				if call then 
-					brgtnow, incr, sendcom = nil, nil, nil 
-					call() 
-				end
-			else
-				sendcom(brgtnow)
-			end
-		end)
-	end
-end
---]]
-
 local z = function()
-    local state
-    if itmn > 10 then
-        func = itmn > 20 and "comf" or "comm"
-        print("func = "..func)
-        if gotRAW[6] == 1 and cellNo >= 0 then
-			itmState[cellNo] = nil
-			comm = "OFF" 
-			print("Switch OFF NOW!")
-		elseif gotRAW[6] == 3 and not cellNo then
-            table.insert(itmState,{itmn})
-            print("Switch ON, just NOW!")
+    comm = ""
+    if itm > 10 then
+        func = itm > 20 and "comf" or "comm"
+        if gotRAW[6] == 1 and stateNo >= 0 then
+            itmState[stateNo] = nil
+            comm = "OFF"
+        elseif gotRAW[6] == 3 and stateNo == 0 then
+            table.insert(itmState,{itm})
             comm = "ON"
         elseif gotRAW[6] == 5 then
-            if not cellNo then
-                table.insert(itmState,{itmn})
-                print("Switch ON, just NOW!")
+            if stateNo == 0 then
+                table.insert(itmState,{itm})
                 comm = "ON"
             else
-                itmState[cellNo] = nil
-                comm = "OFF" 
-                print("Switch OFF NOW!")
+                itmState[stateNo] = nil
+                comm = "OFF"
             end
         end
-        print(itmn, func, comm)
-		-- newdeal()
-	else
-		
-		if gotRAW[6] == 10 then 
-			if runbrt[itmn] then
-				runbrt[itmn].stopbr = true 
-			end
-		else
-			runbrt[itmn] = {}
+        _G.gotRAW = {}
+        _G.stateNo = 0
+        if comm ~= "" then
+            newdeal()
+        end
+        return
+    else
+        if gotRAW[6] == 10 then
+            if _G.runbrt[itm] then
+               _G.runbrt[itm].stopbr = 1
+            end
+            _G.gotRAW = {}
+            _G.stateNo = 0
+        else
+            _G.runbrt[itm] = {}
+            _G.runbrt[itm].stopbr = 0
+            local zz = itm
 			local r = function()
-				runbrt[itmn].func = nil
-				runbrt[itmn].stopbr = nil
-				runbrt[itmn] = nil
-			end
+                _G.runbrt[zz].func = nil
+                _G.runbrt[zz].stopbr = nil
+                _G.runbrt[zz] = nil
+                _G.stateNo = 0
+			    _G.gotRAW = {}
+            end
+			
+			local strt = _G.itmState[stateNo][2]
+			local dir = 1
+			
 			if gotRAW[6] == 1 then
-				runbrt[itmn].func = setbrgt(cellNo, itmn, itmState[cellNo][2], false)
-			elseif gotRAW[6] == 3 then
-				runbrt[itmn].func = setbrgt(cellNo, itmn, itmState[cellNo][2], true)
-			elseif gotRAW[6] == 5 then
-				local dir = not itmState[cellNo][4]
-				runbrt[itmn].func = setbrgt(cellNo, itmn, itmState[cellNo][2], dir)
+				dir = 0
+            elseif gotRAW[6] == 5 then
+				if strt < 5 then dir = 1
+				elseif strt > 90 then dir = 0
+				else dir = (_G.itmState[stateNo][4] == 0) and 1 or 0
+				end
 			end
-		runbrt[itmn].func(r)
-		end
-	end 
-   --]]
+        _G.itmState[stateNo][4] = dir
+		_G.runbrt[itm].func = setbrgt(strt, dir)
+		_G.runbrt[itm].func(r)
+        end
+    end
 end
 z()
-tmr.create():alarm(4000,0,function() runbrt[itmn].stopbr = true end)
 end

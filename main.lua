@@ -2,6 +2,8 @@ do
 uart.alt(1)
 uart.setup(0, 9600, 8, uart.PARITY_NONE, uart.STOPBITS_1, 0)
 answer = {}
+answerFlag = true
+
 myClient = "noo01"
 mod = {} 
 mod.publish = false
@@ -9,6 +11,8 @@ mod.publish = false
 crcR = 0
 gotRAW = {}
 itmState = {}
+stateNo = 0
+runbrt = {}
 counter = 1
 startUART = false
 --------
@@ -52,28 +56,48 @@ uart.on("data",1,
         if gotRAW[1] == 0xAD and gotRAW[17] == 0xAE and (gotRAW[16]) == bit.band(crcR, 0xFF) then 
             tmr.stop(stUART)
             tmr.unregister(stUART)
-            local s = ""
-            -- for _, v in pairs(gotRAW) do
-            --    s = s.."$"..string.format("%02X", v)
-            --end
-            
-			for n, v in pairs(gotRAW) do
-                s = s..(n-1)..":"..string.format("%d", v).." "
+
+            if 128 ~= gotRAW[6] then
+                --[[local s = ""
+              
+    			for n, v in pairs(gotRAW) do
+                    s = s..(n-1)..":"..string.format("%d", v).." "
+                end
+    			s = string.sub(s, 1, #s - 1)
+                --]]
+                -- answer = {}
+                -- answer.raw = s
+               --[[
+                uart.alt(0)
+                uart.setup(0, 115200, 8, uart.PARITY_NONE, uart.STOPBITS_1, 1)
+                 --]]
+                dofile('analize.lua')
+            else
+                gotRAW = {}
             end
-			s = string.sub(s, 1, #s - 2)
-            answer = {}
-            answer.raw = s
-            dofile('analize.lua')
             clearUART()
         end
     end
 end, 0)
 --]]
 function newdeal()
-    answer = {}
 	for i=2, 16 do
 		pat[i] = 0
 	end
+    stateNo = 0
+    local srchNo = function()
+        for ks, vs in pairs(itmState) do
+            if vs[1] == itm then
+                stateNo = ks
+            end
+        end
+    end
+    srchNo()
+    if stateNo == 0 and itm <11 then
+        table.insert(itmState, {itm, 50, 100, 0})
+        srchNo()    
+    end
+    
     local lis = file.list()
     local fl
     if func ~= nil then 
@@ -81,7 +105,7 @@ function newdeal()
     else 
         fl = 'run.lua'
     end
-    for k,v in pairs(lis) do
+    for k,_ in pairs(lis) do
         if k == fl then
             dofile(fl)
             return
