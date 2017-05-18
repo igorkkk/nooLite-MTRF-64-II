@@ -25,7 +25,9 @@ dealnow = function()
     itmState[stateNo][2] = dd
     if pat[8] ~= 0 then
         itmState[stateNo][3] = dd
-    end
+    else
+		itmState[stateNo][3] = 5
+	end
     _G.gotRAW = {}
     dofile('writeMTRF.lua')
 end
