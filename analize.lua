@@ -3,6 +3,7 @@ local analize = function()
     itm = gotRAW[5]
     stateNo = 0
     local srchNo = function()
+        local ks, vs
         for ks, vs in pairs(itmState) do
             if vs[1] == itm then
                 stateNo = ks

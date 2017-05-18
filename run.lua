@@ -1,16 +1,10 @@
 do
 local dealnow
 dealnow = function()
+    local itm = _G.itm
     pat[5] = itm
-    for ks, vs in pairs(itmState) do
-        if vs[1] == itm then
-            stateNo = ks
-        end
-    end
-    if stateNo == 0 and itm <11 then
-        stateNo = #itmState+1
-        itmState[stateNo] = {itm, 50, 100, true}
-    end
+    local stateNo = _G.stateNo
+    
     if func == "comm" or func == "comf" then
         pat[2] = (func == "comm") and 0 or 2
 		if comm == "ON" then 
@@ -73,6 +67,7 @@ dealnow = function()
        else pat[6] = 9
        end  
     end
+	comm, itm, func = "", "", ""
 	dofile('writeMTRF.lua')
 end
 dealnow()

@@ -86,13 +86,16 @@ function newdeal()
 	end
     stateNo = 0
     local srchNo = function()
+        local ks, vs
         for ks, vs in pairs(itmState) do
             if vs[1] == itm then
                 stateNo = ks
             end
         end
     end
+    
     srchNo()
+    
     if stateNo == 0 and itm <11 then
         table.insert(itmState, {itm, 50, 100, 0})
         srchNo()    
