@@ -51,8 +51,8 @@ local z = function()
 			_G.runbrt[zz].func = nil
 			_G.runbrt[zz].stopbr = nil
 			_G.runbrt[zz] = nil
-			_G.stateNo = 0
-			_G.gotRAW = {}
+			--_G.stateNo = 0
+			--_G.gotRAW = {}
 		end
 		
 		local strt = _G.itmState[stateNo][2]
