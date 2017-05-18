@@ -36,7 +36,6 @@ local analize = function()
         end
 		--]]
 		
-		
 		if gotRAW[6] == 4 then
 			dofile('analizedesks4.lua')
 			return
@@ -53,21 +52,23 @@ local analize = function()
 --]]
     local itms = string.format("%02d", gotRAW[5])
 
-	if gotRAW[6] == 0 then
-    	answer[itms] = 0
-        if stateNo == 0 and itm > 10 then
-            itmState[stateNo] = nil
-        elseif stateNo then
-            itmState[stateNo][2] = 0
-        end
-	
- 	elseif gotRAW[6] == 2 then
-        if stateNo == 0 then
-            table.insert(itmState,{itm})
-        else
-            answer[itms] = itmState[stateNo][3] or 100
-            itmState[stateNo][2] = itmState[stateNo][3]
-        end
+	if gotRAW[3] == 0 then
+		if gotRAW[6] == 0 then
+			answer[itms] = 0
+			if stateNo == 0 and itm > 10 then
+				itmState[stateNo] = nil
+			elseif stateNo then
+				itmState[stateNo][2] = 0
+			end
+		
+		elseif gotRAW[6] == 2 then
+			if stateNo == 0 then
+				table.insert(itmState,{itm})
+			else
+				answer[itms] = itmState[stateNo][3] or 100
+				itmState[stateNo][2] = itmState[stateNo][3]
+			end
+	end
 	
 	elseif gotRAW[6] == 130 or gotRAW[6] == 25  then
 		if gotRAW[11] == 255 then

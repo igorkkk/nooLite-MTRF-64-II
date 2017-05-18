@@ -58,15 +58,15 @@ uart.on("data",1,
             tmr.unregister(stUART)
 
             if 128 ~= gotRAW[6] then
-                --[[local s = ""
-              
-    			for n, v in pairs(gotRAW) do
+                ---[[
+				local s = ""
+				for n, v in pairs(gotRAW) do
                     s = s..(n-1)..":"..string.format("%d", v).." "
                 end
     			s = string.sub(s, 1, #s - 1)
                 --]]
-                -- answer = {}
-                -- answer.raw = s
+                answer = {}
+                answer.raw = s
                --[[
                 uart.alt(0)
                 uart.setup(0, 115200, 8, uart.PARITY_NONE, uart.STOPBITS_1, 1)
