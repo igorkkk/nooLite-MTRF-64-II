@@ -1,6 +1,7 @@
 # nooLite-MTRF-64-II
 
 # Код работает вполне устойчиво, но глубоко не тестировался. Beta.
+# Применяйте код отсюда: https://github.com/igorkkk/nooLite_MTRF-64/tree/AllWorks_Clean
 
 Мысли об этом коде здесь: http://bit.ly/2pQRqW8
 
